@@ -31,7 +31,7 @@ export default {
       termine: false,
       keyword: ["if", "while", "var", "for", "let", "final"],
       separador: ["(", ")", ";", "{", "}", "[", "]", ","],
-      operador: ["+", "-", "*", "/", "%", "==", "!=", "<=", ">=", "="],
+      operador: ["+", "-", "*", "/", "%", "==", "!=", "<=", ">="],
       numero: ["0", "1", "2", "3", "4", "5", "6", "7", "8","9"],
       impresion: "",
     };
