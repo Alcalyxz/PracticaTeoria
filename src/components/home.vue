@@ -1,22 +1,48 @@
 <template>
-  <div>
-    <h1>Practica 1 Teoría del Lenguaje de Compiladores.</h1>
+  <div class="todo">
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap"
+      rel="stylesheet"
+    />
+    <div class="titulos">
+<h1 class="titulo">¡Practica 1 Teoría del Lenguaje de Compiladores!</h1>
+    </div>
+    
     <br />
-    <input type="text" v-model="codigo" />
-    <button @click="leerCodigo">Leer codigo</button>
-    <button @click="imprimirlista">imprimir lista</button>
 
-    <br />
-    <br />
-    <br />
-    <br />
+    <div class="cajas">
+      <div class="inputs">
+        <input class="cajaTexto" type="text" v-model="codigo" />
+      </div>
+      <br />
 
-    <textarea
-      name="textarea"
-      rows="10"
-      cols="50"
-      v-model="impresion"
-    ></textarea>
+      <div class="boton">
+        <button class="botones" @click="leerCodigo">Leer Código</button>
+        <button class="botones" @click="imprimirlista">Imprimir Lista</button>
+      </div>
+
+      <div class="textarea">
+        <textarea
+          class="texto"
+          name="textarea"
+          rows="10"
+          cols="50"
+          v-model="impresion"
+        ></textarea>
+      </div>
+
+      <h4 class="creditos">By JuanPabloPosadaSepúlveda & Daniel Quiroz</h4>
+
+      <p>Ejemplos (Copiar y Pegar) : </p>
+
+      <ul>
+        <li>var buenosDias == "BuenosDias";</li>
+        <li>for while if []{}() 575;</li>
+        <li>for (var m = 0; m >= 100; m ++)</li>
+        <li>if ( holi != "Holi" ) </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -32,7 +58,8 @@ export default {
       keyword: ["if", "while", "var", "for", "let", "final"],
       separador: ["(", ")", ";", "{", "}", "[", "]", ","],
       operador: ["+", "-", "*", "/", "%", "==", "!=", "<=", ">="],
-      numero: ["0", "1", "2", "3", "4", "5", "6", "7", "8","9"],
+      numero: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+      asignacion:["="],
       impresion: "",
     };
   },
@@ -80,6 +107,22 @@ export default {
             break;
           }
         }
+
+        /* for (var m = 0; m < this.operador.length; m++) {
+          if (this.asignacion[m] == palabra.toString()) {
+            console.log("ENCONTRE Asignacion!");
+            var token70 = {
+              type: "Asignacion",
+              value: palabra,
+            };
+            this.lista.agregar(token70);
+            this.codigo = this.codigo.slice(i);
+            i = 0;
+            palabra = this.codigo.slice(0, i).toString();
+            console.log(this.codigo);
+            break;
+          }
+        } */
 
         //Recorrer los Separadores Para saber si pertenecen a alguno
         for (var k = 0; k < this.separador.length; k++) {
@@ -153,7 +196,7 @@ export default {
 
           //palabra = this.codigo.slice(1).toString();
         }
-         if (this.codigo[i + 1] == null) {
+        if (this.codigo[i + 1] == null) {
           var token9 = {
             type: "identify",
             value: this.codigo.slice(0, i),
@@ -169,11 +212,9 @@ export default {
           console.log(this.codigo);
 
           //palabra = this.codigo.slice(1).toString();
-        } 
-
+        }
 
         if (this.numero.includes(this.codigo[i].toString())) {
-          
           var numerito = "";
           for (var g = 0; g < this.codigo.length; g++) {
             if (this.numero.includes(this.codigo[g].toString())) {
@@ -216,17 +257,30 @@ export default {
     imprimirlista() {
       this.impresion = "";
       let elemento = this.lista.primero;
-      this.impresion = this.impresion + "Tipo:" + elemento.token.type + " " + "Valor:" + elemento.token.value + " -> \n";
+      this.impresion =
+        this.impresion +
+        "Tipo: " +
+        elemento.token.type +
+        " " +
+        "Valor: " +
+        elemento.token.value +
+        " -> \n";
       console.log(elemento);
       if (!elemento) console.log("No hay elementos en la lista");
 
       while (elemento.siguiente) {
         elemento = elemento.siguiente;
 
-        if(elemento.token.value != "" ){
-          this.impresion = this.impresion + "Tipo:" + elemento.token.type + " " + "Valor:" + elemento.token.value + " -> \n";
+        if (elemento.token.value != "") {
+          this.impresion =
+            this.impresion +
+            "Tipo: " +
+            elemento.token.type +
+            " " +
+            "Valor: " +
+            elemento.token.value +
+            " -> \n";
         }
-        
       }
     },
   },
@@ -236,4 +290,60 @@ export default {
 };
 </script>
 <style scoped>
+* {
+  font-family: "Ubuntu", sans-serif;
+}
+
+.todo {
+  align-items: center;
+  padding: 10% 30%;
+  background: linear-gradient(to top, 
+  gray, rgb(190, 190, 190));
+  
+}
+.cajas {
+  align-items: center;
+  padding: 2% 20%;
+}
+.titulo {
+  color: white;
+  text-align: center;
+}
+.texto {
+  border-radius: 8px;
+  margin-top: 30px;
+}
+.textarea {
+  display: flex;
+  justify-content: space-around;
+}
+.cajaTexto {
+  border-radius: 5px;
+  border: 0px;
+  display: flex;
+  justify-content: space-around;
+  height: 20px;
+}
+.boton {
+  display: flex;
+  justify-content: space-around;
+  height: 30px;
+}
+
+.botones {
+  border-radius: 10px;
+}
+
+.inputs {
+  display: flex;
+  justify-content: space-around;
+}
+.creditos{
+  color: white;
+  text-align: center;
+}
+.titulos{
+  display: flex;
+  justify-content: space-around;
+}
 </style>
