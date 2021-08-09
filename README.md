@@ -1,3 +1,9 @@
+
+# Elaborado por: Juan Pablo Posada Sepúlveda y Daniel Quiroz
+
+Deployment in https://practicateoriatetompiladores.herokuapp.com/
+
+
 # teoria_compiladores
 
 ## Project setup
