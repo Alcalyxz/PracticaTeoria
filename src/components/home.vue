@@ -6,20 +6,40 @@
       rel="stylesheet"
     />
     <div class="titulos">
-<h1 class="titulo">¡Practica 1 Teoría del Lenguaje de Compiladores!</h1>
+      <h1 class="titulo">¡Practica 1 Teoría del Lenguaje de Compiladores!</h1>
     </div>
-    
+
     <br />
 
     <div class="cajas">
       <div class="inputs">
-        <input class="cajaTexto" type="text" v-model="codigo" />
+        <input
+          placeholder="Ingrese el Código"
+          class="cajaTexto"
+          type="text"
+          v-model="codigo"
+        />
       </div>
       <br />
 
       <div class="boton">
-        <button class="botones" @click="leerCodigo">Leer Código</button>
-        <button class="botones" @click="imprimirlista">Imprimir Lista</button>
+        <button class="botones" @click="leerCodigo">
+          1. Analizador Léxico
+        </button>
+        <button class="botones" @click="imprimirlista">
+          2. Imprimir Lista Tokens
+        </button>
+        <button class="botones" @click="analizarTokens">
+          3. Analizador de Sintaxis
+        </button>
+      </div>
+
+      <div v-if="openRespuesta">
+        <h2>RESPUESTA:</h2>
+        <h3 v-if="acepte == false">
+          Está incorrecta la Sintaxis: {{ informacion }}
+        </h3>
+        <h3 v-if="acepte == true">Está Correcta la Sintaxis</h3>
       </div>
 
       <div class="textarea">
@@ -32,15 +52,15 @@
         ></textarea>
       </div>
 
-      <h4 class="creditos">By JuanPabloPosadaSepúlveda & Daniel Quiroz</h4>
+      <h4 class="creditos">By JuanPabloPosadaSepúlveda & DanielQuiroz</h4>
 
-      <p>Ejemplos (Copiar y Pegar) : </p>
+      <p>Ejemplos (Copiar y Pegar) :</p>
 
       <ul>
         <li>var buenosDias == "BuenosDias";</li>
         <li>for while if []{}() 575;</li>
-        <li>for (var m = 0; m >= 100; m ++)</li>
-        <li>if ( holi != "Holi" ) </li>
+        <li>for (var m = 0; m >= 100; m ++);</li>
+        <li>if ( holi != "Holi" ) {};</li>
       </ul>
     </div>
   </div>
@@ -53,13 +73,16 @@ export default {
   data() {
     return {
       lista: null,
+      acepte: true,
+      openRespuesta: false,
+      informacion: "",
       codigo: "",
       termine: false,
-      keyword: ["if", "while", "var", "for", "let", "final"],
+      keyword: ["if", "while", "var", "for", "let", "final", "const"],
       separador: ["(", ")", ";", "{", "}", "[", "]", ","],
       operador: ["+", "-", "*", "/", "%", "==", "!=", "<=", ">="],
       numero: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-      asignacion:["="],
+      asignacion: ["="],
       impresion: "",
     };
   },
@@ -198,7 +221,7 @@ export default {
         }
         if (this.codigo[i + 1] == null) {
           var token9 = {
-            type: "identify",
+            type: "Ultimo",
             value: this.codigo.slice(0, i),
           };
           console.log("ENCONTRE IdentiFYYYYY");
@@ -283,6 +306,99 @@ export default {
         }
       }
     },
+    analizarTokens() {
+      let iterador = this.lista.primero;
+      let primero = this.lista.primero;
+      let ultimo = this.lista.ultimo;
+
+      if (primero.token.type == "char/string") {
+        this.acepte = false;
+        this.informacion =
+          "El primero elemento de una secuencia JS no puede ser un String";
+      }
+
+      if (primero.token.type == "separador") {
+        this.acepte = false;
+        this.informacion =
+          "El primero elemento de una secuencia JS no puede ser un Separador";
+      }
+
+      if (primero.token.type == "Operador") {
+        this.acepte = false;
+        this.informacion =
+          "El primero elemento de una secuencia JS no puede ser un Operador";
+      }
+
+      while (iterador.siguiente) {
+        if (iterador.token.type == "keyword") {
+          if (iterador.siguiente.token.type == "espacio") {
+            if (iterador.siguiente.siguiente.token.type == "keyword") {
+              this.acepte = false;
+              this.informacion =
+                "Después de un Keyword no puede haber un Keyword";
+              break;
+            }
+          }
+        }
+
+        if (iterador.token.value == "(") {
+          if (iterador.siguiente.token.type == "espacio") {
+            if (iterador.siguiente.siguiente.token.value == ")") {
+              this.acepte = false;
+              this.informacion =
+                "Dentro de un parentesis debe existir una expresión.";
+              break;
+            }
+          }
+        }
+
+        if (iterador.token.value == "(") {
+          if (iterador.siguiente.token.value == ")") {
+            this.acepte = false;
+            this.informacion =
+              "Dentro de un parentesis debe existir una expresión.";
+            break;
+          }
+        }
+
+        if (iterador.token.value == "{") {
+          if (iterador.siguiente.token.type == "espacio") {
+            if (iterador.siguiente.siguiente.token.value == "}") {
+              this.acepte = false;
+              this.informacion = "Dentro de un {} debe existir una expresión.";
+              break;
+            }
+          }
+        }
+
+        if (iterador.token.value == "{") {
+          if (iterador.siguiente.token.value == "}") {
+            this.acepte = false;
+            this.informacion = "Dentro de un {} debe existir una expresión.";
+            break;
+          }
+        }
+
+        if (iterador.token.type == "keyword") {
+          if (iterador.siguiente.token.type == "keyword") {
+            this.acepte = false;
+            this.informacion =
+              "Después de un Keyword no puede haber un Keyword";
+            break;
+          }
+        }
+        
+
+        iterador = iterador.siguiente;
+      }
+
+      console.log(this.openRespuesta);
+
+      this.openRespuesta = !this.openRespuesta;
+
+      console.log(iterador.token.value + " " + iterador.token.type);
+      console.log(ultimo.token.value + " " + ultimo.token.type);
+    },
   },
   mounted() {
     this.lista = listasLigadas;
@@ -297,9 +413,7 @@ export default {
 .todo {
   align-items: center;
   padding: 10% 30%;
-  background: linear-gradient(to top, 
-  gray, rgb(190, 190, 190));
-  
+  background: linear-gradient(to top, gray, rgb(190, 190, 190));
 }
 .cajas {
   align-items: center;
@@ -332,17 +446,18 @@ export default {
 
 .botones {
   border-radius: 10px;
+  height: 40px;
 }
 
 .inputs {
   display: flex;
   justify-content: space-around;
 }
-.creditos{
+.creditos {
   color: white;
   text-align: center;
 }
-.titulos{
+.titulos {
   display: flex;
   justify-content: space-around;
 }
