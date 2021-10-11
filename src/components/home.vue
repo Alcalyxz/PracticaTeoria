@@ -6,7 +6,7 @@
       rel="stylesheet"
     />
     <div class="titulos">
-      <h1 class="titulo">¡Practica 1 Teoría del Lenguaje de Compiladores!</h1>
+      <h1 class="titulo">¡Practica 2 Teoría del Lenguaje de Compiladores!</h1>
     </div>
 
     <br />
